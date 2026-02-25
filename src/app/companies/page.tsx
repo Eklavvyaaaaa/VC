@@ -113,39 +113,39 @@ export default function CompaniesPage() {
                     <thead>
                         <tr className="bg-neutral-soft/50 border-b-[1.5px] border-neutral-border">
                             <th className="px-8 py-5">
-                                <button onClick={() => requestSort('name')} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.15em] text-neutral-muted hover:text-foreground transition-colors">
+                                <button onClick={() => requestSort('name')} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-neutral-muted hover:text-foreground transition-colors">
                                     Entity <ArrowUpDown className="h-3 w-3" />
                                 </button>
                             </th>
-                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.15em] text-neutral-muted">Core Sector</th>
-                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.15em] text-neutral-muted">Maturity</th>
-                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.15em] text-neutral-muted">Hub</th>
-                            <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-[0.15em] text-neutral-muted">Signal</th>
+                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-wider text-neutral-muted">Core Sector</th>
+                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-wider text-neutral-muted">Maturity</th>
+                            <th className="px-8 py-5 text-[10px] font-black uppercase tracking-wider text-neutral-muted">Hub</th>
+                            <th className="px-8 py-5 text-right text-[10px] font-black uppercase tracking-wider text-neutral-muted">Signal</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y-[1.5px] divide-neutral-border">
                         {filteredCompanies.length > 0 ? (
                             filteredCompanies.map((company) => (
                                 <tr key={company.id} className="hover:bg-primary/[0.02] transition-all group cursor-pointer">
-                                    <td className="px-8 py-6">
+                                    <td className="px-6 py-5">
                                         <Link href={`/companies/${company.id}`} className="flex items-center gap-4">
-                                            <div className="h-10 w-10 rounded-xl bg-neutral-soft border-[1.5px] border-neutral-border flex items-center justify-center font-black text-xs text-neutral-muted group-hover:border-primary-border group-hover:text-primary-foreground group-hover:shadow-sm transition-all">
+                                            <div className="h-10 w-10 rounded-xl bg-neutral-soft border-[1.5px] border-neutral-border flex items-center justify-center font-black text-xs text-neutral-muted group-hover:border-primary-border group-hover:text-primary-foreground group-hover:shadow-sm transition-all shrink-0">
                                                 {company.name[0]}
                                             </div>
-                                            <div className="flex flex-col">
-                                                <span className="text-[14px] font-black text-foreground group-hover:text-primary-foreground transition-colors tracking-tight">{company.name}</span>
-                                                <span className="text-xs text-neutral-muted font-bold opacity-70 tracking-tight">{company.website.replace('https://', '')}</span>
+                                            <div className="flex flex-col min-w-0">
+                                                <span className="text-[14px] font-black text-foreground group-hover:text-primary-foreground transition-colors tracking-tight truncate">{company.name}</span>
+                                                <span className="text-xs text-neutral-muted font-bold opacity-70 tracking-tight truncate">{company.website.replace('https://', '')}</span>
                                             </div>
                                         </Link>
                                     </td>
-                                    <td className="px-8 py-6">
-                                        <span className="bg-neutral-soft text-neutral-muted text-[10px] font-black px-2.5 py-1 rounded-lg border-[1.5px] border-neutral-border uppercase tracking-widest">
+                                    <td className="px-6 py-5">
+                                        <span className="bg-neutral-soft text-neutral-muted text-[10px] font-black px-2.5 py-1 rounded-lg border-[1.5px] border-neutral-border uppercase tracking-wider whitespace-nowrap">
                                             {company.sector}
                                         </span>
                                     </td>
-                                    <td className="px-8 py-6">
+                                    <td className="px-6 py-5">
                                         <span className={cn(
-                                            "inline-flex items-center rounded-lg px-2.5 py-1 text-[10px] font-black border-[1.5px] uppercase tracking-widest",
+                                            "inline-flex items-center rounded-lg px-2.5 py-1 text-[10px] font-black border-[1.5px] uppercase tracking-wider whitespace-nowrap",
                                             company.stage === 'Seed' ? "bg-emerald-50 text-emerald-700 border-emerald-100" :
                                                 company.stage.startsWith('Series') ? "bg-primary text-primary-foreground border-primary-border" :
                                                     "bg-neutral-soft text-neutral-muted border-neutral-border"
@@ -153,13 +153,13 @@ export default function CompaniesPage() {
                                             {company.stage}
                                         </span>
                                     </td>
-                                    <td className="px-8 py-6 text-xs font-bold text-neutral-muted truncate max-w-[150px]">
+                                    <td className="px-6 py-5 text-xs font-bold text-neutral-muted truncate max-w-[200px]">
                                         {company.location}
                                     </td>
-                                    <td className="px-8 py-6 text-right">
+                                    <td className="px-6 py-5 text-right whitespace-nowrap">
                                         <div className="flex items-center justify-end gap-2 text-emerald-600">
                                             <CheckCircle2 className="h-4 w-4" />
-                                            <span className="text-[10px] font-black uppercase">Verified</span>
+                                            <span className="text-[10px] font-black uppercase tracking-tight">Verified</span>
                                         </div>
                                     </td>
                                 </tr>

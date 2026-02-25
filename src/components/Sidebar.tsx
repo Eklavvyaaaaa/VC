@@ -46,7 +46,7 @@ export function Sidebar() {
             {/* Navigation */}
             <nav className="flex-1 px-3 space-y-1 mt-4">
                 <div className="px-3 mb-2">
-                    <span className="text-[10px] font-bold text-neutral-muted uppercase tracking-[0.2em]">Core Discovery</span>
+                    <span className="text-[10px] font-bold text-neutral-muted uppercase tracking-[0.1em]">Core Discovery</span>
                 </div>
                 {navItems.map((item) => {
                     const isActive = pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
@@ -74,7 +74,7 @@ export function Sidebar() {
             {/* Quick Lists / Folders */}
             <div className="px-5 py-6 space-y-4">
                 <div className="flex items-center justify-between px-1">
-                    <span className="text-[10px] font-bold text-neutral-muted uppercase tracking-[0.2em]">Universe Segments</span>
+                    <span className="text-[10px] font-bold text-neutral-muted uppercase tracking-[0.1em]">Universe Segments</span>
                     <button className="h-5 w-5 rounded-lg border-[1.5px] border-neutral-border hover:border-primary-border hover:bg-primary/5 flex items-center justify-center transition-all group">
                         <Plus className="h-3 w-3 text-neutral-muted group-hover:text-primary-foreground" />
                     </button>

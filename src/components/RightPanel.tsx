@@ -16,7 +16,7 @@ export function RightPanel() {
         <aside className="w-80 border-l-[1.5px] border-neutral-border bg-neutral-soft/30 h-screen hidden xl:flex flex-col p-6 space-y-8 overflow-y-auto no-scrollbar shadow-[-1px_0_0_0_rgba(0,0,0,0.02)]">
             {/* Quick Start Guide */}
             <div className="space-y-4">
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-muted px-1 flex items-center gap-2">
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-muted px-1 flex items-center gap-2">
                     <BookOpen className="h-3.5 w-3.5" />
                     Explorer Guide
                 </h3>
@@ -41,7 +41,7 @@ export function RightPanel() {
 
             {/* Platform Status */}
             <div className="space-y-4">
-                <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-muted px-1 flex items-center gap-2">
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-muted px-1 flex items-center gap-2">
                     <Zap className="h-3.5 w-3.5" />
                     Engine Status
                 </h3>

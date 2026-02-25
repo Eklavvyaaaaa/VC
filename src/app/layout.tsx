@@ -27,7 +27,7 @@ export default function RootLayout({
           {/* Column 2: Content Hub */}
           <div className="relative flex flex-1 flex-col overflow-y-auto no-scrollbar bg-white">
             <Header />
-            <main className="flex-1 px-10 py-8 max-w-5xl mx-auto w-full">
+            <main className="flex-1 px-10 py-8 max-w-7xl mx-auto w-full">
               {children}
             </main>
           </div>

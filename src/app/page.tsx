@@ -38,11 +38,11 @@ export default function Home() {
               <div className={cn("p-2.5 rounded-xl bg-neutral-soft border-[1.5px] border-neutral-border group-hover:border-primary-border group-hover:bg-primary/5 transition-all shadow-sm", stat.color)}>
                 <stat.icon className="h-4 w-4" />
               </div>
-              <span className="text-[10px] font-black text-neutral-muted bg-neutral-soft px-2 py-1 rounded-lg border-[1.5px] border-neutral-border uppercase tracking-widest shadow-inner">
+              <span className="text-[10px] font-black text-neutral-muted bg-neutral-soft px-2 py-1 rounded-lg border-[1.5px] border-neutral-border uppercase tracking-wider shadow-inner">
                 {stat.trend}
               </span>
             </div>
-            <p className="text-[10px] font-black text-neutral-muted uppercase tracking-[0.2em]">{stat.label}</p>
+            <p className="text-[10px] font-black text-neutral-muted uppercase tracking-[0.1em]">{stat.label}</p>
             <p className="text-3xl font-black text-foreground mt-2 tracking-tighter">{stat.value}</p>
           </div>
         ))}
@@ -52,11 +52,11 @@ export default function Home() {
         {/* Main Signals Feed */}
         <div className="lg:col-span-2 space-y-8">
           <div className="flex items-center justify-between border-b-[1.5px] border-neutral-border pb-5">
-            <h2 className="text-[11px] font-black text-foreground uppercase tracking-[0.2em] flex items-center gap-2">
+            <h2 className="text-[11px] font-black text-foreground uppercase tracking-[0.1em] flex items-center gap-2">
               <Clock className="h-4 w-4 text-primary-foreground" />
               Recent Intelligence
             </h2>
-            <Link href="/companies" className="text-[10px] font-black text-primary-foreground uppercase tracking-widest hover:underline hover:scale-105 transition-transform">
+            <Link href="/companies" className="text-[10px] font-black text-primary-foreground uppercase tracking-wider hover:underline hover:scale-105 transition-transform">
               Explore All Analysis
             </Link>
           </div>
@@ -118,14 +118,14 @@ export default function Home() {
                   <div className="p-1.5 bg-primary-foreground rounded-lg shadow-lg">
                     <Sparkles className="h-4 w-4 text-white" />
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-foreground">Antigravity AI</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.1em] text-primary-foreground">Antigravity AI</span>
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-[15px] font-black leading-tight text-foreground tracking-tight">Deep Signal Enrichment is active.</h3>
                   <p className="text-xs text-neutral-muted font-bold leading-relaxed opacity-80">Extract precision signals from any public URL with proprietary accuracy algorithms.</p>
                 </div>
                 <div className="flex pt-3">
-                  <button className="btn-primary py-2.5 px-6 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg hover:shadow-primary/40">
+                  <button className="btn-primary py-2.5 px-6 text-[10px] font-black uppercase tracking-[0.1em] shadow-lg hover:shadow-primary/40">
                     Launch Engine
                   </button>
                 </div>
