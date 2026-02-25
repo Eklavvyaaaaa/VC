@@ -10,7 +10,9 @@ import {
     ChevronRight,
     PlusCircle,
     FileJson,
-    FileSpreadsheet
+    FileSpreadsheet,
+    Settings2,
+    ArrowUpRight
 } from 'lucide-react';
 import { getFromStorage, setToStorage, STORAGE_KEYS } from '@/lib/storage';
 import { CompanyList, Company } from '@/types';
@@ -24,7 +26,6 @@ export default function ListsPage() {
     const [showCreate, setShowCreate] = useState(false);
 
     useEffect(() => {
-        // Initial empty list if none exist
         const savedLists = getFromStorage<CompanyList[]>(STORAGE_KEYS.LISTS, []);
         setLists(savedLists);
     }, []);
@@ -84,127 +85,136 @@ export default function ListsPage() {
     };
 
     return (
-        <div className="space-y-8">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-slate-900">My Lists</h1>
-                    <p className="text-slate-500">Manage and export your collections of target companies.</p>
+        <div className="space-y-10 pb-20">
+            {/* Header */}
+            <div className="flex items-end justify-between">
+                <div className="space-y-1">
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground">Workspace Collections</h1>
+                    <p className="text-sm text-neutral-muted">Curated segments and investment pipelines.</p>
                 </div>
-                {!showCreate ? (
+                {!showCreate && (
                     <button
                         onClick={() => setShowCreate(true)}
-                        className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-all active:scale-95"
+                        className="btn-primary flex items-center gap-2"
                     >
                         <Plus className="h-4 w-4" />
-                        New List
+                        Create Collection
                     </button>
-                ) : (
-                    <div className="flex gap-2">
+                )}
+            </div>
+
+            {showCreate && (
+                <div className="content-card border-primary-border bg-primary/20 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div className="flex items-center gap-4">
                         <input
                             autoFocus
-                            className="rounded-md border-slate-200 text-sm focus:border-indigo-500 focus:ring-indigo-500 py-1.5"
-                            placeholder="List name..."
+                            className="flex-1 bg-white border border-neutral-border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+                            placeholder="e.g. Series A Fintech 2024"
                             value={newListName}
                             onChange={(e) => setNewListName(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && createList()}
                         />
-                        <button
-                            onClick={createList}
-                            className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
-                        >
-                            Create
-                        </button>
-                        <button
-                            onClick={() => setShowCreate(false)}
-                            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-                        >
-                            Cancel
-                        </button>
+                        <button onClick={createList} className="btn-primary py-2 px-6">Confirm</button>
+                        <button onClick={() => setShowCreate(false)} className="btn-secondary py-2 px-6">Cancel</button>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {lists.length > 0 ? (
                     lists.map((list) => (
-                        <div key={list.id} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col hover:border-indigo-200 transition-colors">
-                            <div className="p-6 flex-1">
-                                <div className="flex items-start justify-between">
-                                    <div className="h-10 w-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
-                                        <Users className="h-5 w-5" />
-                                    </div>
-                                    <div className="flex gap-1">
-                                        <button
-                                            onClick={() => exportAsJSON(list)}
-                                            title="Export JSON"
-                                            className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded transition-all"
-                                        >
-                                            <FileJson className="h-4 w-4" />
-                                        </button>
-                                        <button
-                                            onClick={() => exportAsCSV(list)}
-                                            title="Export CSV"
-                                            className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded transition-all"
-                                        >
-                                            <FileSpreadsheet className="h-4 w-4" />
-                                        </button>
-                                        <button
-                                            onClick={() => deleteList(list.id)}
-                                            title="Delete List"
-                                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-all"
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </button>
-                                    </div>
+                        <div key={list.id} className="content-card group flex flex-col hover:border-primary-border transition-all">
+                            <div className="flex items-start justify-between mb-6">
+                                <div className="h-10 w-10 rounded-xl bg-neutral-soft border border-neutral-border flex items-center justify-center text-neutral-muted group-hover:text-primary-foreground group-hover:border-primary-border transition-all">
+                                    <Users className="h-5 w-5" />
                                 </div>
-                                <h3 className="text-lg font-bold text-slate-900 mt-4">{list.name}</h3>
-                                <p className="text-sm text-slate-500 mt-1">
-                                    {list.companyIds.length} companies saved
-                                </p>
-
-                                <div className="mt-6 space-y-3">
-                                    {list.companyIds.slice(0, 3).map(compId => {
-                                        const company = MOCK_COMPANIES.find(c => c.id === compId);
-                                        return company ? (
-                                            <Link
-                                                key={compId}
-                                                href={`/companies/${compId}`}
-                                                className="flex items-center justify-between text-xs text-slate-600 hover:text-indigo-600 py-1"
-                                            >
-                                                <span className="font-medium">{company.name}</span>
-                                                <ChevronRight className="h-3 w-3" />
-                                            </Link>
-                                        ) : null;
-                                    })}
-                                    {list.companyIds.length > 3 && (
-                                        <p className="text-[10px] text-slate-400 font-medium">+ {list.companyIds.length - 3} more companies</p>
-                                    )}
-                                    {list.companyIds.length === 0 && (
-                                        <p className="text-xs italic text-slate-400">Empty list. Add companies from their profiles.</p>
-                                    )}
+                                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button
+                                        onClick={() => exportAsJSON(list)}
+                                        title="Export JSON"
+                                        className="p-1.5 text-neutral-muted hover:text-foreground hover:bg-neutral-soft rounded transition-all"
+                                    >
+                                        <FileJson className="h-3.5 w-3.5" />
+                                    </button>
+                                    <button
+                                        onClick={() => exportAsCSV(list)}
+                                        title="Export CSV"
+                                        className="p-1.5 text-neutral-muted hover:text-foreground hover:bg-neutral-soft rounded transition-all"
+                                    >
+                                        <FileSpreadsheet className="h-3.5 w-3.5" />
+                                    </button>
+                                    <button
+                                        onClick={() => deleteList(list.id)}
+                                        title="Delete List"
+                                        className="p-1.5 text-neutral-muted hover:text-red-500 hover:bg-red-50 rounded transition-all"
+                                    >
+                                        <Trash2 className="h-3.5 w-3.5" />
+                                    </button>
                                 </div>
                             </div>
-                            <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 mt-auto">
+
+                            <div className="space-y-1 mb-8">
+                                <h3 className="text-sm font-bold text-foreground">{list.name}</h3>
+                                <p className="text-[11px] font-bold text-neutral-muted uppercase tracking-widest">
+                                    {list.companyIds.length} Entities • {new Date(list.createdAt).toLocaleDateString()}
+                                </p>
+                            </div>
+
+                            <div className="space-y-2 mb-8 flex-1">
+                                {list.companyIds.slice(0, 3).map(compId => {
+                                    const company = MOCK_COMPANIES.find(c => c.id === compId);
+                                    return company ? (
+                                        <Link
+                                            key={compId}
+                                            href={`/companies/${compId}`}
+                                            className="flex items-center justify-between p-2 rounded-lg bg-neutral-soft/50 border border-transparent hover:border-neutral-border hover:bg-neutral-soft transition-all group/item"
+                                        >
+                                            <span className="text-[13px] font-medium text-neutral-muted group-hover/item:text-foreground">{company.name}</span>
+                                            <ChevronRight className="h-3.5 w-3.5 text-neutral-muted opacity-0 group-hover/item:opacity-100 transition-all" />
+                                        </Link>
+                                    ) : null;
+                                })}
+                                {list.companyIds.length > 3 && (
+                                    <p className="text-[10px] font-bold text-neutral-muted uppercase tracking-widest pl-2">
+                                        + {list.companyIds.length - 3} additional signals
+                                    </p>
+                                )}
+                                {list.companyIds.length === 0 && (
+                                    <div className="py-4 text-center">
+                                        <p className="text-[11px] font-medium text-neutral-muted italic">Collection is empty.</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="pt-4 border-t border-neutral-border flex items-center justify-between">
                                 <Link
                                     href="/companies"
-                                    className="text-xs font-bold text-indigo-600 hover:text-indigo-700 uppercase flex items-center gap-1"
+                                    className="text-[11px] font-bold text-primary-foreground uppercase tracking-widest flex items-center gap-2 hover:underline"
                                 >
-                                    <PlusCircle className="h-3 w-3" />
-                                    Add Companies
+                                    <PlusCircle className="h-3.5 w-3.5" />
+                                    Add Signals
                                 </Link>
+                                <button className="text-[11px] font-bold text-neutral-muted hover:text-foreground transition-all uppercase tracking-widest flex items-center gap-1">
+                                    Open
+                                    <ArrowUpRight className="h-3 w-3" />
+                                </button>
                             </div>
                         </div>
                     ))
                 ) : (
-                    <div className="col-span-full bg-slate-50 rounded-xl border border-dashed border-slate-300 p-12 text-center text-slate-500">
-                        <PlusCircle className="h-10 w-10 mx-auto text-slate-200 mb-4" />
-                        <h3 className="font-semibold text-slate-700 text-lg">No lists created yet</h3>
-                        <p className="text-sm mt-1 mb-6 max-w-sm mx-auto">Create a list to organize startups by investment thesis, sector interest, or deal stage.</p>
+                    <div className="col-span-full content-card border-dashed py-20 text-center space-y-6">
+                        <div className="h-16 w-16 rounded-full bg-neutral-soft mx-auto flex items-center justify-center">
+                            <PlusCircle className="h-8 w-8 text-neutral-muted opacity-20" />
+                        </div>
+                        <div className="space-y-2">
+                            <h3 className="text-sm font-bold text-foreground">No segments tracked yet</h3>
+                            <p className="text-xs text-neutral-muted max-w-sm mx-auto">Create a collection to organize entities by high-level thesis, sector, or deal stage.</p>
+                        </div>
                         <button
                             onClick={() => setShowCreate(true)}
-                            className="inline-flex items-center gap-2 rounded-md bg-white border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition-all"
+                            className="btn-secondary py-2 px-8 text-[11px] font-bold uppercase tracking-widest"
                         >
-                            Get Started
+                            Initialize List
                         </button>
                     </div>
                 )}

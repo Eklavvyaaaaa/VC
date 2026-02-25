@@ -8,11 +8,15 @@ import {
     Trash2,
     Play,
     Filter,
-    ExternalLink
+    ExternalLink,
+    Terminal,
+    MapPin,
+    Zap
 } from 'lucide-react';
 import { getFromStorage, setToStorage, STORAGE_KEYS } from '@/lib/storage';
 import { SavedSearch } from '@/types';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 export default function SavedSearchesPage() {
     const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
@@ -29,61 +33,71 @@ export default function SavedSearchesPage() {
     };
 
     return (
-        <div className="space-y-8">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-slate-900">Saved Searches</h1>
-                    <p className="text-slate-500">Quickly re-run your most important discovery filters.</p>
-                </div>
+        <div className="space-y-10 pb-20">
+            {/* Header */}
+            <div className="flex flex-col gap-1">
+                <h1 className="text-2xl font-bold tracking-tight text-foreground">Saved Queries</h1>
+                <p className="text-sm text-neutral-muted">Reusable discovery filters and automated signals.</p>
             </div>
 
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 gap-6">
                 {savedSearches.length > 0 ? (
                     savedSearches.map((search) => (
-                        <div key={search.id} className="bg-white rounded-xl border border-slate-200 p-6 flex items-center justify-between hover:border-indigo-200 transition-colors group">
-                            <div className="flex items-center gap-4">
-                                <div className="h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-indigo-600 transition-colors">
-                                    <Clock className="h-5 w-5" />
+                        <div key={search.id} className="content-card flex items-center justify-between hover:border-primary-border transition-all group">
+                            <div className="flex items-center gap-6">
+                                <div className="h-10 w-10 rounded-xl bg-neutral-soft border border-neutral-border flex items-center justify-center text-neutral-muted group-hover:text-primary-foreground group-hover:border-primary-border transition-all">
+                                    <Terminal className="h-4 w-4" />
                                 </div>
-                                <div>
-                                    <h3 className="text-sm font-bold text-slate-900">{search.name}</h3>
-                                    <div className="flex items-center gap-2 mt-1">
-                                        {Object.entries(search.filters).map(([key, value]) => value && (
-                                            <span key={key} className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[10px] font-medium border border-slate-200">
-                                                {key}: {value}
-                                            </span>
-                                        ))}
-                                        <span className="text-[10px] text-slate-400 ml-2">Saved {new Date(search.createdAt).toLocaleDateString()}</span>
+                                <div className="space-y-1">
+                                    <h3 className="text-sm font-bold text-foreground">{search.name}</h3>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-1.5">
+                                            {Object.entries(search.filters).map(([key, value]) => value && (
+                                                <span key={key} className="bg-neutral-soft text-neutral-muted px-2 py-0.5 rounded text-[10px] font-bold border border-neutral-border uppercase tracking-tight">
+                                                    {key}: {value}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <div className="h-3 w-[1px] bg-neutral-border" />
+                                        <span className="text-[10px] font-bold text-neutral-muted uppercase tracking-widest flex items-center gap-1">
+                                            <Clock className="h-2.5 w-2.5" />
+                                            {new Date(search.createdAt).toLocaleDateString()}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Link
                                     href={`/companies?${new URLSearchParams(search.filters as Record<string, string>).toString()}`}
-                                    className="inline-flex items-center gap-2 rounded-md bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition-all"
+                                    className="btn-secondary py-1.5 px-4 text-[11px] font-bold flex items-center gap-2 group/btn"
                                 >
-                                    <Play className="h-3 w-3" />
-                                    Run Search
+                                    <Play className="h-3 w-3 fill-neutral-muted group-hover/btn:fill-foreground transition-all" />
+                                    Execute
                                 </Link>
                                 <button
                                     onClick={() => deleteSearch(search.id)}
-                                    className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-all"
+                                    title="Delete Query"
+                                    className="p-2 text-neutral-muted hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
                                 >
-                                    <Trash2 className="h-4 w-4" />
+                                    <Trash2 className="h-3.5 w-3.5" />
                                 </button>
                             </div>
                         </div>
                     ))
                 ) : (
-                    <div className="bg-slate-50 rounded-xl border border-dashed border-slate-300 p-12 text-center text-slate-500">
-                        <Filter className="h-10 w-10 mx-auto text-slate-200 mb-4" />
-                        <h3 className="font-semibold text-slate-700">No saved searches</h3>
-                        <p className="text-sm mt-1 mb-6">Save your common search criteria from the Discover page to access them instantly.</p>
+                    <div className="content-card border-dashed py-20 text-center space-y-6">
+                        <div className="h-16 w-16 rounded-full bg-neutral-soft mx-auto flex items-center justify-center">
+                            <Zap className="h-8 w-8 text-neutral-muted opacity-20" />
+                        </div>
+                        <div className="space-y-2">
+                            <h3 className="text-sm font-bold text-foreground">No saved queries</h3>
+                            <p className="text-xs text-neutral-muted max-w-sm mx-auto">Save your complex filters from the discovery hub to monitor new entities automatically.</p>
+                        </div>
                         <Link
                             href="/companies"
-                            className="inline-flex items-center gap-2 rounded-md bg-white border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition-all"
+                            className="btn-secondary py-2 px-8 text-[11px] font-bold uppercase tracking-widest"
                         >
-                            Go to Discover
+                            Open Hub
                         </Link>
                     </div>
                 )}

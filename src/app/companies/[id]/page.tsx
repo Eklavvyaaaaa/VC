@@ -20,7 +20,9 @@ import {
     ShieldCheck,
     Search,
     ChevronRight,
-    Loader2
+    Loader2,
+    Link as LinkIcon,
+    AlertCircle
 } from 'lucide-react';
 import { MOCK_COMPANIES } from '@/lib/data';
 import { Company, EnrichmentData } from '@/types';
@@ -41,15 +43,10 @@ export default function CompanyProfilePage() {
         const found = MOCK_COMPANIES.find(c => c.id === id);
         if (found) {
             setCompany(found);
-            // Load enrichment from storage if exists
             const cached = getFromStorage<EnrichmentData | null>(`${STORAGE_KEYS.CACHED_ENRICHMENT_PREFIX}${id}`, null);
             if (cached) setEnrichment(cached);
-
-            // Load note from storage
             const savedNote = getFromStorage<string>(`${STORAGE_KEYS.NOTES_PREFIX}${id}`, '');
             if (savedNote) setNote(savedNote);
-
-            // Check if saved
             const savedList = getFromStorage<string[]>(STORAGE_KEYS.SAVED_COMPANIES, []) || [];
             setIsSaved(savedList.includes(id as string));
         }
@@ -90,262 +87,214 @@ export default function CompanyProfilePage() {
             });
 
             const data = await resp.json();
-
-            if (!resp.ok) {
-                throw new Error(data.error || `Enrichment failed with status ${resp.status}`);
-            }
+            if (!resp.ok) throw new Error(data.error || 'Enrichment failed');
 
             setEnrichment(data);
             setToStorage(`${STORAGE_KEYS.CACHED_ENRICHMENT_PREFIX}${id}`, data);
         } catch (err) {
             console.error(err);
-            alert(err instanceof Error ? err.message : 'Failed to enrich company data. Please try again.');
         } finally {
             setIsEnriching(false);
         }
     };
 
     if (!company) return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-            <Loader2 className="h-8 w-8 text-indigo-600 animate-spin" />
-            <p className="text-slate-500 font-medium">Locating entity...</p>
+        <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+            <Loader2 className="h-6 w-6 text-neutral-muted animate-spin" />
+            <p className="text-xs font-bold text-neutral-muted uppercase tracking-widest">Locating Entity...</p>
         </div>
     );
 
     return (
-        <div className="max-w-7xl mx-auto space-y-10 pb-20 px-4">
-            {/* Breadcrumb / Actions */}
+        <div className="space-y-10">
+            {/* Top Navigation */}
             <div className="flex items-center justify-between">
                 <button
                     onClick={() => router.back()}
-                    className="group flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-indigo-600 premium-transition"
+                    className="group flex items-center gap-2 text-[11px] font-bold text-neutral-muted hover:text-foreground transition-all uppercase tracking-widest"
                 >
-                    <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 premium-transition" />
-                    Back to Universe
+                    <ArrowLeft className="h-3 w-3" />
+                    Back to Workspace
                 </button>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     <button
                         onClick={toggleSaveCompany}
                         className={cn(
-                            "inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold premium-transition",
-                            isSaved
-                                ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
-                                : "bg-white text-slate-600 border border-slate-200 hover:border-indigo-200 hover:text-indigo-600 subtle-shadow"
+                            "btn-secondary flex items-center gap-2 py-1.5",
+                            isSaved && "bg-emerald-50 text-emerald-700 border-emerald-100"
                         )}
                     >
                         {isSaved ? <Check className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
-                        {isSaved ? 'In Pipeline' : 'Add to Pipeline'}
+                        {isSaved ? 'In Pipeline' : 'Track Entity'}
                     </button>
                     <button
                         onClick={handleEnrich}
                         disabled={isEnriching}
-                        className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white premium-transition hover:bg-slate-800 disabled:opacity-50"
+                        className="btn-primary flex items-center gap-2 py-1.5"
                     >
-                        {isEnriching ? (
-                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        ) : (
-                            <Zap className="h-3.5 w-3.5 fill-white/20" />
-                        )}
-                        {enrichment ? 'Re-Enrich Signals' : 'Extract Signals'}
+                        {isEnriching ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Zap className="h-3.5 w-3.5" />}
+                        AI Research
                     </button>
                 </div>
             </div>
 
-            {/* Profile Header */}
-            <div className="bg-white/50 backdrop-blur-sm rounded-[2.5rem] border border-slate-200 p-10 flex flex-col md:flex-row gap-8 items-start relative overflow-hidden subtle-shadow">
-                <div className="h-24 w-24 rounded-[2rem] bg-indigo-600/5 border border-indigo-100 flex items-center justify-center text-3xl font-bold text-indigo-600 shrink-0 shadow-inner">
+            {/* Entity Header */}
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+                <div className="h-20 w-20 rounded-xl bg-neutral-soft border border-neutral-border flex items-center justify-center text-2xl font-bold text-neutral-muted shrink-0">
                     {company.name[0]}
                 </div>
-                <div className="flex-1 space-y-4 pt-2">
+                <div className="flex-1 space-y-4">
                     <div className="flex flex-wrap items-center gap-3">
-                        <h1 className="text-4xl font-bold tracking-tight text-slate-900">{company.name}</h1>
-                        <span className="inline-flex items-center rounded-lg bg-indigo-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-indigo-700 border border-indigo-100/50">
-                            {company.stage}
-                        </span>
+                        <h1 className="text-3xl font-bold tracking-tight text-foreground">{company.name}</h1>
+                        <span className="badge-lavender">{company.stage}</span>
                     </div>
-                    <p className="text-slate-500 text-lg max-w-2xl leading-relaxed">
+                    <p className="text-[15px] text-neutral-muted leading-relaxed max-w-3xl">
                         {company.description}
                     </p>
-                    <div className="flex flex-wrap items-center gap-6 pt-2">
-                        <a
-                            href={company.website}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-sm font-bold text-indigo-600 hover:underline underline-offset-4"
-                        >
-                            <Globe className="h-4 w-4" />
+                    <div className="flex flex-wrap items-center gap-6 pt-1">
+                        <a href={company.website} target="_blank" className="flex items-center gap-2 text-xs font-bold text-primary-foreground hover:underline">
+                            <LinkIcon className="h-3.5 w-3.5" />
                             {company.website.replace('https://', '')}
-                            <ExternalLink className="h-3 w-3" />
                         </a>
-                        <div className="flex items-center gap-2 text-sm font-bold text-slate-400">
-                            <MapPin className="h-4 w-4" />
+                        <div className="flex items-center gap-2 text-xs font-bold text-neutral-muted">
+                            <MapPin className="h-3.5 w-3.5" />
                             {company.location}
                         </div>
-                        <div className="flex items-center gap-2 text-sm font-bold text-slate-400">
-                            <Building2 className="h-4 w-4" />
+                        <div className="flex items-center gap-2 text-xs font-bold text-neutral-muted">
+                            <Building2 className="h-3.5 w-3.5" />
                             {company.sector}
                         </div>
                     </div>
                 </div>
-                <Sparkles className="absolute -right-8 -top-8 h-32 w-32 text-indigo-500/5 pointer-events-none" />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                {/* Left Column: Intelligence */}
-                <div className="lg:col-span-2 space-y-10">
-                    {/* Enrichment Display */}
-                    <div className="space-y-6">
-                        <div className="flex items-center justify-between px-2">
-                            <div className="flex items-center gap-2">
-                                <Zap className="h-5 w-5 text-indigo-600" />
-                                <h2 className="text-xl font-bold text-slate-900">AI Intelligence</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                {/* Insights Section */}
+                <div className="lg:col-span-2 space-y-8">
+                    <div className="flex items-center justify-between border-b border-neutral-border pb-4">
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-foreground flex items-center gap-2">
+                            <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
+                            Venture Intelligence
+                        </h2>
+                        {enrichment && (
+                            <span className="text-[10px] font-bold text-neutral-muted uppercase tracking-widest flex items-center gap-1.5">
+                                <Clock className="h-3 w-3" />
+                                Updated {new Date(enrichment.timestamp).toLocaleDateString()}
+                            </span>
+                        )}
+                    </div>
+
+                    {!enrichment && !isEnriching ? (
+                        <div className="content-card border-dashed border-2 py-16 text-center space-y-4">
+                            <div className="h-12 w-12 rounded-full bg-neutral-soft mx-auto flex items-center justify-center">
+                                <Zap className="h-5 w-5 text-neutral-muted opacity-40" />
                             </div>
-                            {enrichment && (
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-                                    <Clock className="h-3 w-3" />
-                                    Signals Freshness: {new Date(enrichment.timestamp).toLocaleDateString()}
-                                </span>
-                            )}
+                            <div className="space-y-1">
+                                <h3 className="text-sm font-bold text-foreground">Extract Precision Signals</h3>
+                                <p className="text-xs text-neutral-muted max-w-sm mx-auto">Analyze website metadata and technical footprints to generate deep intelligence.</p>
+                            </div>
+                            <button onClick={handleEnrich} className="btn-secondary text-[11px] font-bold px-6">Start Engine</button>
                         </div>
-
-                        {!enrichment && !isEnriching ? (
-                            <div className="bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200 p-12 text-center group hover:border-indigo-200 transition-colors">
-                                <div className="h-16 w-16 rounded-[1.5rem] bg-white flex items-center justify-center mx-auto mb-4 border border-slate-100 shadow-sm group-hover:scale-105 premium-transition">
-                                    <Sparkles className="h-8 w-8 text-slate-200 group-hover:text-indigo-400 premium-transition" />
-                                </div>
-                                <h3 className="text-lg font-bold text-slate-900">No signals extracted yet</h3>
-                                <p className="text-slate-400 text-sm mt-2 max-w-sm mx-auto font-medium">
-                                    Run the enrichment engine to analyze website content and extract deep startup intelligence.
+                    ) : isEnriching ? (
+                        <div className="content-card py-20 flex flex-col items-center justify-center gap-4 border-dashed">
+                            <Loader2 className="h-6 w-6 text-primary-foreground animate-spin" />
+                            <p className="text-[11px] font-bold text-neutral-muted uppercase tracking-widest animate-pulse">Running signal extraction...</p>
+                        </div>
+                    ) : (enrichment && (
+                        <div className="space-y-8">
+                            <div className="content-card bg-primary/30 border-primary-border">
+                                <p className="text-[15px] font-medium text-foreground leading-relaxed italic">
+                                    "{enrichment.summary}"
                                 </p>
-                                <button
-                                    onClick={handleEnrich}
-                                    className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:bg-white px-6 py-2 rounded-xl border border-transparent hover:border-indigo-100 premium-transition"
-                                >
-                                    Launch Analysis
-                                </button>
                             </div>
-                        ) : isEnriching ? (
-                            <div className="bg-white/50 border border-slate-200 rounded-[2rem] p-16 flex flex-col items-center justify-center text-center space-y-6">
-                                <div className="relative">
-                                    <div className="h-20 w-20 rounded-[1.5rem] border-2 border-indigo-100 flex items-center justify-center relative z-10 bg-white">
-                                        <Loader2 className="h-8 w-8 text-indigo-600 animate-spin" />
-                                    </div>
-                                    <div className="absolute -inset-4 bg-indigo-50 rounded-full blur-2xl animate-pulse" />
-                                </div>
-                                <div className="space-y-1">
-                                    <h3 className="text-lg font-bold text-slate-900">Antigravity Engine Working</h3>
-                                    <p className="text-slate-400 text-sm font-medium">Scraping website and extracting precision signals...</p>
-                                </div>
-                            </div>
-                        ) : enrichment && (
-                            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                {/* Summary Card */}
-                                <div className="bg-white rounded-[2rem] border border-slate-200 p-8 subtle-shadow group">
-                                    <p className="text-slate-900 text-lg leading-relaxed font-medium">
-                                        {enrichment.summary}
-                                    </p>
-                                </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {/* Capabilities */}
-                                    <div className="bg-white rounded-[2rem] border border-slate-200 p-8 subtle-shadow">
-                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
-                                            <ShieldCheck className="h-3.5 w-3.5 text-indigo-600" />
-                                            Core Capabilities
-                                        </h4>
-                                        <ul className="space-y-4">
-                                            {enrichment.whatTheyDo.map((item, i) => (
-                                                <li key={i} className="flex gap-3">
-                                                    <div className="h-5 w-5 rounded-full bg-indigo-50 flex items-center justify-center shrink-0 mt-0.5">
-                                                        <Check className="h-3 w-3 text-indigo-600" />
-                                                    </div>
-                                                    <span className="text-sm text-slate-600 leading-relaxed font-medium">{item}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-
-                                    {/* Derived Signals */}
-                                    <div className="bg-indigo-600 rounded-[2rem] p-8 text-white relative overflow-hidden group">
-                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-indigo-200 mb-6 flex items-center gap-2 relative z-10">
-                                            <Zap className="h-3.5 w-3.5 fill-indigo-400/30" />
-                                            Derived Signals
-                                        </h4>
-                                        <div className="space-y-4 relative z-10">
-                                            {enrichment.derivedSignals.map((signal, i) => (
-                                                <div key={i} className="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-2xl border border-white/5 hover:bg-white/20 premium-transition">
-                                                    <div className="h-2 w-2 rounded-full bg-white opacity-40 animate-pulse" />
-                                                    <span className="text-sm font-bold">{signal}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <Building2 className="absolute -right-8 -bottom-8 h-32 w-32 text-white/5 rotate-12 group-hover:scale-110 premium-transition" />
-                                    </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="space-y-6">
+                                    <h3 className="text-[10px] font-bold uppercase tracking-widest text-neutral-muted">Core Thesis</h3>
+                                    <ul className="space-y-3">
+                                        {enrichment.whatTheyDo.map((item, i) => (
+                                            <li key={i} className="flex gap-3 text-xs text-neutral-muted leading-relaxed">
+                                                <div className="h-1.5 w-1.5 rounded-full bg-primary-border shrink-0 mt-1.5" />
+                                                {item}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
-
-                                {/* Keywords */}
-                                <div className="bg-white rounded-[2rem] border border-slate-200 p-8 subtle-shadow">
-                                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4 px-2">Sector Keywords</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {enrichment.keywords.map((tag, i) => (
-                                            <span key={i} className="px-4 py-2 bg-slate-100 rounded-xl text-xs font-bold text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 premium-transition cursor-default">
-                                                {tag}
-                                            </span>
+                                <div className="space-y-6">
+                                    <h3 className="text-[10px] font-bold uppercase tracking-widest text-neutral-muted">Proprietary Signals</h3>
+                                    <div className="space-y-2">
+                                        {enrichment.derivedSignals.map((signal, i) => (
+                                            <div key={i} className="flex items-center justify-between bg-white border border-neutral-border p-3 rounded-lg group hover:border-primary-border transition-all">
+                                                <span className="text-xs font-bold text-foreground">{signal}</span>
+                                                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            </div>
                                         ))}
                                     </div>
                                 </div>
                             </div>
-                        )}
-                    </div>
+
+                            <div className="space-y-4">
+                                <h3 className="text-[10px] font-bold uppercase tracking-widest text-neutral-muted">Workspace Keywords</h3>
+                                <div className="flex flex-wrap gap-1.5">
+                                    {enrichment.keywords.map((tag, i) => (
+                                        <span key={i} className="bg-neutral-soft text-[10px] font-bold text-neutral-muted px-2 py-1 rounded border border-neutral-border group hover:border-primary-border hover:bg-white transition-all cursor-default">
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
-                {/* Right Column: Sidebar Research */}
+                {/* Internal Side Panel */}
                 <div className="space-y-10">
-                    {/* Metrics / Info */}
                     <div className="space-y-6">
-                        <h2 className="text-xl font-bold text-slate-900 px-2">Quick Stats</h2>
-                        <div className="bg-white rounded-[2rem] border border-slate-200 overflow-hidden subtle-shadow">
-                            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
-                                        <Users className="h-5 w-5" />
-                                    </div>
-                                    <span className="text-sm font-bold text-slate-600">Headcount</span>
-                                </div>
-                                <span className="text-sm font-black text-slate-900">50-100</span>
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-foreground">Operational Data</h2>
+                        <div className="content-card p-0 divide-y divide-neutral-border overflow-hidden">
+                            <div className="p-4 flex items-center justify-between">
+                                <span className="text-xs text-neutral-muted flex items-center gap-2">
+                                    <Users className="h-3.5 w-3.5" />
+                                    Headcount
+                                </span>
+                                <span className="text-xs font-bold text-foreground">50-100</span>
                             </div>
-                            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="h-10 w-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
-                                        <Calendar className="h-5 w-5" />
-                                    </div>
-                                    <span className="text-sm font-bold text-slate-600">Founded</span>
-                                </div>
-                                <span className="text-sm font-black text-slate-900">2021</span>
+                            <div className="p-4 flex items-center justify-between">
+                                <span className="text-xs text-neutral-muted flex items-center gap-2">
+                                    <Calendar className="h-3.5 w-3.5" />
+                                    Founded
+                                </span>
+                                <span className="text-xs font-bold text-foreground">2021</span>
+                            </div>
+                            <div className="p-4 flex items-center justify-between">
+                                <span className="text-xs text-neutral-muted flex items-center gap-2">
+                                    <ShieldCheck className="h-3.5 w-3.5" />
+                                    Compliance
+                                </span>
+                                <span className="text-xs font-bold text-emerald-600">Verified</span>
                             </div>
                         </div>
                     </div>
 
-                    {/* Research Notes */}
                     <div className="space-y-6">
-                        <div className="px-2 flex items-center justify-between">
-                            <h2 className="text-xl font-bold text-slate-900">Research Notes</h2>
-                            <FileText className="h-4 w-4 text-slate-400" />
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-foreground">Research Diary</h2>
+                            <FileText className="h-3 w-3 text-neutral-muted" />
                         </div>
-                        <div className="bg-white rounded-[2rem] border border-slate-200 p-8 space-y-4 subtle-shadow">
+                        <div className="space-y-3">
                             <textarea
                                 value={note}
                                 onChange={(e) => setNote(e.target.value)}
-                                placeholder="Add internal thesis or feedback..."
-                                className="w-full min-h-[160px] bg-slate-50/50 border-none rounded-2xl p-4 text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:ring-0 resize-none premium-transition"
+                                placeholder="Add investment thesis or team feedback..."
+                                className="input-calm w-full min-h-[200px] py-4 leading-relaxed resize-none"
                             />
                             <button
                                 onClick={handleSaveNote}
                                 disabled={isSaving}
-                                className="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-xs font-bold text-white premium-transition hover:bg-indigo-600 disabled:opacity-50"
+                                className="btn-primary w-full flex items-center justify-center gap-2"
                             >
                                 {isSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-                                {isSaving ? 'Synching...' : 'Save Notes'}
+                                {isSaving ? 'Synching...' : 'Commit Notes'}
                             </button>
                         </div>
                     </div>
@@ -353,4 +302,24 @@ export default function CompanyProfilePage() {
             </div>
         </div>
     );
+}
+
+function CheckCircle2(props: any) {
+    return (
+        <svg
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+            <path d="m9 12 2 2 4-4" />
+        </svg>
+    )
 }

@@ -1,66 +1,146 @@
 @import "tailwindcss";
 
-:root {
-  --background: #fcfcfd;
-  --foreground: #09090b;
-  --card: #ffffff;
-  --card-foreground: #09090b;
-  --popover: #ffffff;
-  --popover-foreground: #09090b;
-  --primary: #4f46e5;
-  --primary-foreground: #ffffff;
-  --secondary: #f4f4f5;
-  --secondary-foreground: #18181b;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-  --accent: #f4f4f5;
-  --accent-foreground: #18181b;
-  --border: #e4e4e7;
-  --input: #e4e4e7;
-  --ring: #4f46e5;
-  --radius: 0.75rem;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --radius-xl: var(--radius);
+  --color-background: #ffffff;
+  --color-foreground: #1a1a1b;
+
+  --color-neutral-soft: #f9fafb;
+  --color-neutral-muted: #6b7280;
+  --color-neutral-border: #e2e4e7;
+
+  --color-primary: #f5f3ff;
+  --color-primary-foreground: #7c3aed;
+  --color-primary-border: #c4b5fd;
+
+  --color-secondary: #fafafa;
+  --color-secondary-foreground: #3f3f46;
+
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+
+  --color-accent: #f5f3ff;
+  --color-accent-foreground: #7c3aed;
+
+  --color-border: #e2e4e7;
+  --color-input: #f4f4f5;
+  --color-ring: #c084fc;
+
+  --radius-xl: 0.75rem;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  selection-background-color: var(--primary);
-  selection-color: var(--primary-foreground);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Utilities for Minimal UI */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* Base Styles for Calm SaaS */
+.content-card {
+  background-color: var(--color-background);
+  border: 1.5px solid var(--color-neutral-border);
+  /* Bolder outline */
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  /* Proper depth */
 }
 
+.content-card:hover {
+  border-color: var(--color-primary-border);
+  background-color: rgba(245, 243, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.btn-primary {
+  background-color: var(--color-primary-foreground);
+  color: white;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.625rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: 1.5px solid var(--color-primary-foreground);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+}
+
+.btn-secondary {
+  background-color: white;
+  border: 1.5px solid var(--color-neutral-border);
+  /* Bolder outline */
+  color: var(--color-secondary-foreground);
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.625rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-neutral-soft);
+  border-color: var(--color-neutral-muted);
+}
+
+.badge-lavender {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border: 1.5px solid var(--color-primary-border);
+  /* Bolder outline */
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  /* Pill shape for proper badges */
+}
+
+.nav-item-active {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  font-weight: 600;
+  border-right: 2px solid var(--color-primary-foreground);
+}
+
+.input-calm {
+  background-color: white;
+  border: 1.5px solid var(--color-neutral-border);
+  /* Bolder outline */
+  border-radius: 0.625rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  outline: none;
+  font-weight: 500;
+}
+
+.input-calm:focus {
+  border-color: var(--color-primary-foreground);
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+}
+
+/* Minimal Utilities */
 .subtle-shadow {
-  shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
 }
 
-.premium-transition {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms;
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

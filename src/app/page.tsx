@@ -10,160 +10,127 @@ import {
   Clock,
   Plus,
   ArrowUpRight,
-  Sparkles
+  Sparkles,
+  BarChart3,
+  Users
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function Home() {
   return (
-    <div className="max-w-7xl mx-auto space-y-12 pb-20 px-4">
-      {/* Hero / Welcome */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100/50 text-indigo-600 text-[10px] font-bold uppercase tracking-wider">
-            <Sparkles className="h-3 w-3" />
-            Intelligence Engine Active
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900">
-            Discover your next <span className="text-indigo-600">outlier.</span>
-          </h1>
-          <p className="text-slate-500 text-lg max-w-xl">
-            Real-time signals and AI-powered enrichment for the modern venture team.
-          </p>
-        </div>
-        <div className="flex gap-4">
-          <Link
-            href="/companies"
-            className="group inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-8 py-4 text-sm font-bold text-white premium-transition hover:bg-slate-800 hover:-translate-y-1"
-          >
-            Start Research
-            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 premium-transition" />
-          </Link>
-        </div>
+    <div className="space-y-12 pb-10">
+      {/* Workspace Header */}
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-black tracking-tight text-foreground uppercase tracking-widest">Intelligence Hub</h1>
+        <p className="text-sm text-neutral-muted font-bold">Real-time proprietary signals and universe discovery for Veridia Capital.</p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="bg-white/50 backdrop-blur-sm p-8 rounded-[2rem] border border-slate-200/60 premium-transition hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5 group">
-          <div className="flex items-center justify-between mb-6">
-            <div className="h-12 w-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white premium-transition">
-              <Building2 className="h-6 w-6" />
+      {/* Stats Summary Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {[
+          { label: 'Universe Size', value: '1,284', icon: Building2, trend: '+12%', color: 'text-primary-foreground' },
+          { label: 'Enrichments', value: '452', icon: Zap, trend: '85%', color: 'text-amber-500' },
+          { label: 'Active Pipeline', value: '18', icon: ListTodo, trend: '2 new', color: 'text-emerald-600' },
+          { label: 'Team Activity', value: '24', icon: Users, trend: 'Today', color: 'text-primary-foreground' },
+        ].map((stat, i) => (
+          <div key={i} className="content-card shadow-sm border-[1.5px] border-neutral-border group hover:border-primary-border hover:shadow-md transition-all">
+            <div className="flex items-center justify-between mb-5">
+              <div className={cn("p-2.5 rounded-xl bg-neutral-soft border-[1.5px] border-neutral-border group-hover:border-primary-border group-hover:bg-primary/5 transition-all shadow-sm", stat.color)}>
+                <stat.icon className="h-4 w-4" />
+              </div>
+              <span className="text-[10px] font-black text-neutral-muted bg-neutral-soft px-2 py-1 rounded-lg border-[1.5px] border-neutral-border uppercase tracking-widest shadow-inner">
+                {stat.trend}
+              </span>
             </div>
-            <span className="text-xs font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded-lg">
-              <TrendingUp className="h-3 w-3" />
-              +12%
-            </span>
+            <p className="text-[10px] font-black text-neutral-muted uppercase tracking-[0.2em]">{stat.label}</p>
+            <p className="text-3xl font-black text-foreground mt-2 tracking-tighter">{stat.value}</p>
           </div>
-          <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Total Universe</p>
-          <p className="text-4xl font-bold text-slate-900 mt-2">1,284</p>
-        </div>
-
-        <div className="bg-white/50 backdrop-blur-sm p-8 rounded-[2rem] border border-slate-200/60 premium-transition hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5 group">
-          <div className="flex items-center justify-between mb-6">
-            <div className="h-12 w-12 rounded-2xl bg-violet-50 flex items-center justify-center text-violet-600 group-hover:bg-violet-600 group-hover:text-white premium-transition">
-              <Zap className="h-6 w-6" />
-            </div>
-            <span className="text-xs font-bold text-violet-600 flex items-center gap-1 bg-violet-50 px-2 py-1 rounded-lg">
-              <Clock className="h-3 w-3" />
-              Live
-            </span>
-          </div>
-          <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Enrichments Run</p>
-          <p className="text-4xl font-bold text-slate-900 mt-2">452</p>
-        </div>
-
-        <div className="bg-white/50 backdrop-blur-sm p-8 rounded-[2rem] border border-slate-200/60 premium-transition hover:border-indigo-200 hover:shadow-xl hover:shadow-indigo-500/5 group">
-          <div className="flex items-center justify-between mb-6">
-            <div className="h-12 w-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600 group-hover:bg-amber-600 group-hover:text-white premium-transition">
-              <ListTodo className="h-6 w-6" />
-            </div>
-          </div>
-          <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Active Pipelenes</p>
-          <p className="text-4xl font-bold text-slate-900 mt-2">18</p>
-        </div>
+        ))}
       </div>
 
-      {/* Detailed Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-4">
-        {/* Activity Feed */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="flex items-center justify-between px-2">
-            <h2 className="text-xl font-bold text-slate-900">Recent Signals</h2>
-            <Link href="/companies" className="text-sm font-bold text-indigo-600 hover:underline underline-offset-4">
-              Explore All Signals
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* Main Signals Feed */}
+        <div className="lg:col-span-2 space-y-8">
+          <div className="flex items-center justify-between border-b-[1.5px] border-neutral-border pb-5">
+            <h2 className="text-[11px] font-black text-foreground uppercase tracking-[0.2em] flex items-center gap-2">
+              <Clock className="h-4 w-4 text-primary-foreground" />
+              Recent Intelligence
+            </h2>
+            <Link href="/companies" className="text-[10px] font-black text-primary-foreground uppercase tracking-widest hover:underline hover:scale-105 transition-transform">
+              Explore All Analysis
             </Link>
           </div>
-          <div className="bg-white/40 border border-slate-200/50 rounded-[2rem] overflow-hidden backdrop-blur-sm">
+          <div className="space-y-4">
             {[
               { id: 1, text: 'New company discovered in AgriTech', sub: 'TerraForma Labs • Nairobi', time: '2m ago' },
               { id: 2, text: 'Enrichment complete for QuantumScale', sub: 'Detected hiring surge in London', time: '1h ago' },
               { id: 3, text: 'Veridia AI moved to "Due Diligence"', sub: 'Updated by Alex Chen', time: '3h ago' },
               { id: 4, text: 'Sector alert: HealthTech', sub: '4 new Seed rounds detected today', time: '5h ago' },
-            ].map((i) => (
-              <div key={i.id} className="group p-6 flex items-center justify-between hover:bg-white/80 premium-transition border-b border-slate-100 last:border-0">
+              { id: 5, text: 'OrbitLink connectivity analysis refined', sub: 'New derived signals available', time: '8h ago' },
+            ].map((item) => (
+              <div key={item.id} className="content-card p-5 flex items-center justify-between hover:bg-primary/[0.02] border-[1.5px] border-neutral-border transition-all group cursor-pointer shadow-sm hover:shadow-md">
                 <div className="flex items-center gap-5">
-                  <div className="h-10 w-10 rounded-xl bg-slate-100/50 flex items-center justify-center group-hover:bg-white premium-transition">
-                    <Building2 className="h-5 w-5 text-slate-400 group-hover:text-indigo-600 premium-transition" />
+                  <div className="h-10 w-10 rounded-xl bg-neutral-soft border-[1.5px] border-neutral-border flex items-center justify-center group-hover:border-primary-border group-hover:bg-white transition-all shadow-sm">
+                    <Building2 className="h-4 w-4 text-neutral-muted group-hover:text-primary-foreground transition-colors" />
                   </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900">{i.text}</h4>
-                    <p className="text-xs text-slate-500 mt-0.5 font-medium">{i.sub}</p>
+                  <div className="flex flex-col">
+                    <h4 className="text-[14px] font-black text-foreground tracking-tight">{item.text}</h4>
+                    <p className="text-xs text-neutral-muted font-bold mt-1 opacity-70 tracking-tight">{item.sub}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{i.time}</span>
-                  <div className="h-8 w-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 premium-transition bg-indigo-50 text-indigo-600">
-                    <ArrowUpRight className="h-4 w-4" />
-                  </div>
+                <div className="flex items-center gap-6">
+                  <span className="text-[10px] font-black text-neutral-muted uppercase tracking-widest opacity-60">{item.time}</span>
+                  <ArrowUpRight className="h-4 w-4 text-neutral-border group-hover:text-primary-foreground group-hover:-translate-y-1 group-hover:translate-x-1 transition-all" />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Quick Tools */}
-        <div className="space-y-6">
-          <h2 className="text-xl font-bold text-slate-900 px-2">Quick Actions</h2>
+        {/* Sidebar Operations */}
+        <div className="space-y-8">
+          <h2 className="text-[11px] font-black text-foreground uppercase tracking-[0.2em] border-b-[1.5px] border-neutral-border pb-5">Operational Tools</h2>
           <div className="space-y-4">
-            <Link
-              href="/companies"
-              className="flex items-center gap-4 p-6 bg-white border border-slate-200/60 rounded-[2rem] premium-transition hover:border-indigo-300 hover:shadow-lg group"
-            >
-              <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white premium-transition">
-                <Search className="h-5 w-5" />
+            <Link href="/companies" className="content-card shadow-sm border-[1.5px] border-neutral-border flex items-center gap-5 py-5 group hover:border-primary-border hover:shadow-md transition-all">
+              <div className="h-10 w-10 rounded-xl bg-neutral-soft border-[1.5px] border-neutral-border flex items-center justify-center transition-all group-hover:border-primary-border group-hover:bg-primary/5 shadow-sm">
+                <Search className="h-4 w-4 text-neutral-muted group-hover:text-primary-foreground" />
               </div>
-              <div>
-                <h4 className="font-bold text-sm text-slate-900">Run Filters</h4>
-                <p className="text-xs text-slate-500">Segment universe</p>
+              <div className="flex flex-col">
+                <span className="text-[14px] font-black text-foreground tracking-tight">Run Discovery</span>
+                <span className="text-xs text-neutral-muted font-bold opacity-70 tracking-tight">Segment entire universe</span>
               </div>
             </Link>
 
-            <Link
-              href="/lists"
-              className="flex items-center gap-4 p-6 bg-white border border-slate-200/60 rounded-[2rem] premium-transition hover:border-indigo-300 hover:shadow-lg group"
-            >
-              <div className="h-10 w-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white premium-transition">
-                <Plus className="h-5 w-5" />
+            <Link href="/insights" className="content-card shadow-sm border-[1.5px] border-neutral-border flex items-center gap-5 py-5 group hover:border-primary-border hover:shadow-md transition-all">
+              <div className="h-10 w-10 rounded-xl bg-neutral-soft border-[1.5px] border-neutral-border flex items-center justify-center transition-all group-hover:border-primary-border group-hover:bg-primary/5 shadow-sm">
+                <BarChart3 className="h-4 w-4 text-neutral-muted group-hover:text-primary-foreground" />
               </div>
-              <div>
-                <h4 className="font-bold text-sm text-slate-900">Create Pipeline</h4>
-                <p className="text-xs text-slate-500">Sync with colleagues</p>
+              <div className="flex flex-col">
+                <span className="text-[14px] font-black text-foreground tracking-tight">Market Trends</span>
+                <span className="text-xs text-neutral-muted font-bold opacity-70 tracking-tight">Macro sector analysis</span>
               </div>
             </Link>
 
-            <div className="p-8 rounded-[2rem] bg-indigo-600 text-white relative overflow-hidden group shadow-2xl shadow-indigo-200">
-              <div className="relative z-10">
-                <h3 className="text-lg font-bold">Deep Enrichment</h3>
-                <p className="text-indigo-100 text-xs mt-2 leading-relaxed">
-                  Extract precision signals from any URL using the Antigravity AI engine.
-                </p>
-                <Link
-                  href="/companies"
-                  className="inline-flex items-center mt-6 text-xs font-bold bg-white text-indigo-600 px-5 py-2.5 rounded-xl hover:scale-105 premium-transition"
-                >
-                  Start Discovery
-                </Link>
+            {/* Simulated AI Pro Block */}
+            <div className="bg-primary border-[1.5px] border-primary-border rounded-2xl p-7 relative overflow-hidden group shadow-md hover:shadow-lg transition-all cursor-pointer">
+              <div className="relative z-10 space-y-5">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 bg-primary-foreground rounded-lg shadow-lg">
+                    <Sparkles className="h-4 w-4 text-white" />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-foreground">Antigravity AI</span>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-[15px] font-black leading-tight text-foreground tracking-tight">Deep Signal Enrichment is active.</h3>
+                  <p className="text-xs text-neutral-muted font-bold leading-relaxed opacity-80">Extract precision signals from any public URL with proprietary accuracy algorithms.</p>
+                </div>
+                <div className="flex pt-3">
+                  <button className="btn-primary py-2.5 px-6 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg hover:shadow-primary/40">
+                    Launch Engine
+                  </button>
+                </div>
               </div>
-              <Zap className="absolute -right-4 -bottom-4 h-32 w-32 text-indigo-400/20 rotate-12 group-hover:scale-110 premium-transition" />
+              <Zap className="absolute -right-8 -bottom-8 h-32 w-32 text-primary-foreground/10 rotate-12 group-hover:scale-110 group-hover:rotate-6 transition-all duration-700" />
             </div>
           </div>
         </div>
