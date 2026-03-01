@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export async function fetchProductHuntCompanies() {
   const query = `
     query {
-      posts(first: 50, order: VOTES) {
+      posts(first: 100, order: VOTES) {
         edges {
           node {
             id
@@ -13,7 +13,7 @@ export async function fetchProductHuntCompanies() {
             website
             votesCount
             createdAt
-            topics {
+            topics(first: 1) {
               edges {
                 node {
                   name

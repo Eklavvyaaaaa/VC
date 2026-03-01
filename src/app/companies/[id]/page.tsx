@@ -61,6 +61,20 @@ export default function CompanyProfilePage() {
                     const found = data.companies.find((c: Company) => String(c.id) === String(id));
                     if (found) {
                         setCompany(found);
+
+                        // Push to recently viewed feature
+                        try {
+                            const stored = localStorage.getItem('recentlyViewed');
+                            const existing = stored ? JSON.parse(stored) : [];
+                            const filtered = existing.filter((c: any) => c.id !== found.id);
+                            const updated = [
+                                { ...found, viewedAt: new Date().toISOString() },
+                                ...filtered
+                            ].slice(0, 5);
+                            localStorage.setItem('recentlyViewed', JSON.stringify(updated));
+                        } catch (e) {
+                            console.error('Failed to update recentlyViewed', e);
+                        }
                         const cached = getFromStorage<EnrichmentData | null>(`${STORAGE_KEYS.CACHED_ENRICHMENT_PREFIX}${id}`, null);
                         if (cached) {
                             setEnrichment(cached);
