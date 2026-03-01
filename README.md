@@ -1,6 +1,6 @@
-# Antigravity 🪐
+# ThesisFlow 🪐
 
-**Antigravity** is a next-generation discovery and intelligence platform built for modern Venture Capital analysts. It replaces scattered spreadsheets and manual data entry with a streamlined, editorial interface that actively hydrates company profiles using live web data and AI analysis.
+**ThesisFlow** is a next-generation discovery and intelligence platform built for modern Venture Capital analysts. It replaces scattered spreadsheets and manual data entry with a streamlined, editorial interface that actively hydrates company profiles using live web data and AI analysis.
 
 ---
 
@@ -33,8 +33,8 @@ Ensure you have Node.js and `npm` installed on your machine.
 
 #### 2. Clone and Install
 ```bash
-git clone https://github.com/Eklavvyaaaaa/VC.git antigravity
-cd antigravity
+git clone https://github.com/Eklavvyaaaaa/VC.git thesisflow
+cd thesisflow
 npm install
 ```
 

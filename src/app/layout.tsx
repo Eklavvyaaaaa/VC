@@ -9,7 +9,7 @@ const instrumentSerif = Instrument_Serif({ subsets: ["latin"], weight: "400", st
 const ibmPlexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-ibm-plex-mono" });
 
 export const metadata: Metadata = {
-  title: "Antigravity",
+  title: "ThesisFlow",
   description: "Next-gen discovery for venture capital",
 };
 

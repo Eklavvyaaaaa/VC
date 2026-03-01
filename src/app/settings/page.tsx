@@ -84,7 +84,7 @@ export default function SettingsPage() {
                     <section className="space-y-8">
                         <div className="border-b-[1.5px] border-neutral-border pb-5">
                             <h2 className="text-lg font-black text-foreground uppercase tracking-widest leading-none">Discovery Intelligence</h2>
-                            <p className="text-xs text-neutral-muted font-bold mt-2">Control the behavior of the Antigravity deep enrichment engine.</p>
+                            <p className="text-xs text-neutral-muted font-bold mt-2">Control the behavior of the ThesisFlow deep enrichment engine.</p>
                         </div>
 
                         <div className="space-y-4">

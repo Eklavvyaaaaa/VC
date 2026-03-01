@@ -113,7 +113,7 @@ export default function Home() {
               <div className="relative z-10 space-y-4">
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-[#F0EFE9]" />
-                  <span className="font-mono text-[11px] uppercase tracking-wide text-[#F0EFE9]">Antigravity AI</span>
+                  <span className="font-mono text-[11px] uppercase tracking-wide text-[#F0EFE9]">ThesisFlow AI</span>
                 </div>
                 <div className="space-y-1.5">
                   <h3 className="text-[16px] font-medium text-white tracking-tight">Deep Signal Enrichment.</h3>

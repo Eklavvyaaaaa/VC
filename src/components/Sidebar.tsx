@@ -28,7 +28,7 @@ export function Sidebar() {
             {/* Logo */}
             <div className="px-6 py-6 border-b border-[#2A2926]">
                 <Link href="/" className="flex items-center gap-2 group">
-                    <span className="font-display italic text-white text-[18px] tracking-wide">Antigravity</span>
+                    <span className="font-display italic text-white text-[18px] tracking-wide">ThesisFlow</span>
                     <ArrowUpFromLine className="h-3 w-3 text-white/70 group-hover:text-white transition-colors group-hover:-translate-y-0.5 duration-150" />
                 </Link>
             </div>
